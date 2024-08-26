@@ -36,7 +36,7 @@ install_program() {
     echo "生成的地址信息如下:"
     cat ~/popm-address.json
 
-    pubkey_hash=$(jq -r '.pubkey_hash' ~/popm-address.json)
+    pubkey_hash=$(grep -o '"pubkey_hash": *"[^"]*"' ~/popm-address.json | sed 's/"pubkey_hash": *"//;s/"//')
     echo "请充值 tBTC 到以下地址后启动程序: $pubkey_hash"
     
     echo "返回菜单..."
@@ -49,7 +49,7 @@ start_program() {
         return
     fi
 
-    private_key=$(jq -r '.private_key' ~/popm-address.json)
+    private_key=$(grep -o '"private_key": *"[^"]*"' ~/popm-address.json | sed 's/"private_key": *"//;s/"//')
 
     if [ -z "$private_key" ]; then
         echo "未能从密钥文件中获取到 private_key。"
